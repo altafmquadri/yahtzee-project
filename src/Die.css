@@ -36,6 +36,10 @@
   cursor: not-allowed;
 }
 
+.Die-rolling {
+  animation: spin 1s ease-out;
+}
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);

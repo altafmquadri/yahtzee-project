@@ -14,6 +14,7 @@ class Game extends Component {
       dice: Array.from({ length: NUM_DICE }),
       locked: Array(NUM_DICE).fill(false),
       rollsLeft: NUM_ROLLS,
+      rolling: false,
       scores: {
         ones: undefined,
         twos: undefined,
@@ -35,6 +36,14 @@ class Game extends Component {
     this.toggleLocked = this.toggleLocked.bind(this)
   }
 
+  componentDidMount() {
+    this.animateRoll()
+  }
+
+  animateRoll = () => {
+    this.setState({ rolling: true }, () => setTimeout(this.roll, 1000))
+  }
+
   roll(evt) {
     if (this.state.rollsLeft === 0) return
     // roll dice whose indexes are in reroll
@@ -43,20 +52,23 @@ class Game extends Component {
         st.locked[i] ? d : Math.ceil(Math.random() * 6)
       ),
       locked: st.rollsLeft > 1 ? st.locked : Array(NUM_DICE).fill(true),
-      rollsLeft: st.rollsLeft - 1
+      rollsLeft: st.rollsLeft - 1,
+      rolling: false
     }));
   }
 
   toggleLocked(idx) {
     // toggle whether idx is in locked or not
     if (this.state.rollsLeft === 0) return
-    this.setState(st => ({
-      locked: [
-        ...st.locked.slice(0, idx),
-        !st.locked[idx],
-        ...st.locked.slice(idx + 1)
-      ]
-    }))
+    if (!this.state.rolling) {
+      this.setState(st => ({
+        locked: [
+          ...st.locked.slice(0, idx),
+          !st.locked[idx],
+          ...st.locked.slice(idx + 1)
+        ]
+      }))
+    }
   }
 
   doScore(rulename, ruleFn) {
@@ -82,12 +94,13 @@ class Game extends Component {
               locked={this.state.locked}
               handleClick={this.toggleLocked}
               disabled={this.state.rollsLeft === 0}
+              rolling={this.state.rolling}
             />
             <div className='Game-button-wrapper'>
               <button
                 className='Game-reroll'
                 disabled={this.state.locked.every(x => x)}
-                onClick={this.roll}
+                onClick={this.animateRoll}
               >
                 {this.state.rollsLeft} Rerolls Left
               </button>
