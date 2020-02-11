@@ -50,21 +50,41 @@ class TotalOneNumber extends Rule {
 
 class SumDistro extends Rule {
   evalRoll = dice => {
-    // do any of the counts meet of exceed this distro?
+    // do any of the counts meet or exceed this distro?
     return this.freq(dice).some(c => c >= this.count) ? this.sum(dice) : 0;
   };
 }
 
 /** Check if full house (3-of-kind and 2-of-kind) */
 
-class FullHouse {
+class FullHouse extends Rule {
   // TODO
+  evalRoll = dice => {
+    return (this.freq(dice).includes(3) && this.freq(dice).includes(2)) ? this.score : 0
+  }
 }
 
 /** Check for small straights. */
 
-class SmallStraight {
+class SmallStraight extends Rule {
   // TODO
+  evalRoll = dice => {
+    let count = 0
+    while (count <= 3) {
+      if (dice[count] + 1 === dice[count + 1]) {
+        console.log(dice[count] + 1, 'and ', dice[count + 1], 'count is ', count)
+        count++
+        if (count === 3) {
+          return this.score
+        } else if (count === 0) {
+          count++
+        }
+      } else {
+        return 0
+      }
+    }
+
+  }
 }
 
 /** Check for large straights. */
@@ -100,10 +120,10 @@ const threeOfKind = new SumDistro({ count: 3 });
 const fourOfKind = new SumDistro({ count: 4 });
 
 // full house scores as flat 25
-const fullHouse = "TODO";
+const fullHouse = new FullHouse({ score: 25 });
 
 // small/large straights score as 30/40
-const smallStraight = "TODO";
+const smallStraight = new SmallStraight({ score: 30 });
 const largeStraight = new LargeStraight({ score: 40 });
 
 // yahtzee scores as 50

@@ -10,7 +10,8 @@ class Game extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dice: Array.from({ length: NUM_DICE }),
+      dice: [2, 1, 2, 3, 4],
+      // dice: Array.from({ length: NUM_DICE }),
       locked: Array(NUM_DICE).fill(false),
       rollsLeft: NUM_ROLLS,
       scores: {
@@ -47,7 +48,6 @@ class Game extends Component {
 
   toggleLocked(idx) {
     // toggle whether idx is in locked or not
-    console.log(idx)
     this.setState(st => ({
       locked: [
         ...st.locked.slice(0, idx),
