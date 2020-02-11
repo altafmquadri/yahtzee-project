@@ -9,6 +9,14 @@ class ScoreTable extends Component {
   render() {
     const { scores, doScore } = this.props;
 
+    const getTotalScore = () => {
+      let totalScore = 0
+      for (let key in scores) {
+        if (scores[key]) totalScore += scores[key]
+      }
+      return totalScore
+    }
+
     return (
       <div className="ScoreTable">
         <section className="ScoreTable-section">
@@ -83,6 +91,7 @@ class ScoreTable extends Component {
             </tbody>
           </table>
         </section>
+        <h2>Total Score: {getTotalScore()}</h2>
       </div>
     )
   }
