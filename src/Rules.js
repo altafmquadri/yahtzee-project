@@ -69,21 +69,18 @@ class FullHouse extends Rule {
 class SmallStraight extends Rule {
   // TODO
   evalRoll = dice => {
-    let count = 0
-    while (count <= 3) {
-      if (dice[count] + 1 === dice[count + 1]) {
-        console.log(dice[count] + 1, 'and ', dice[count + 1], 'count is ', count)
-        count++
-        if (count === 3) {
-          return this.score
-        } else if (count === 0) {
-          count++
-        }
-      } else {
-        return 0
-      }
+    const d = new Set(dice)
+    console.log(d)
+
+    if (d.has(2) && d.has(3) && d.has(4) && (d.has(1) || d.has(5))) {
+      return this.score
     }
 
+    if (d.has(3) && d.has(4) && d.has(5) && (d.has(2) || d.has(6))) {
+      return this.score
+    }
+
+    return 0
   }
 }
 
